@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>
+        Wiki Search
+    </title>
+</head>
+<body>
+    <h1>Wiki Search</h1>
+    <input type="text" id="searchItem"/>
+    <button id="searchButton" onclick="searchWiki();">Search</button>
+    <script>
+        function searchWiki() {
+            const search=document.getElementById("searchItem").value;
+            const url = `https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=${encodeURIComponent(query)}&utf8=&format=json&origin=*`
+            try {
+        const response = await fetch(url);
+        const data = await response.json();
+        const results = data.query.search;
+
+        if (results.length === 0) {
+          resultsDiv.innerHTML = "<p>No results found.</p>";
+          return;
+        }
+
+        results.forEach(item => {
+          const title = item.title;
+          const snippet = item.snippet;
+          const pageUrl = `https://en.wikipedia.org/wiki/${encodeURIComponent(title)}`;
+
+          const div = document.createElement("div");
+          div.className = "result-item";
+          div.innerHTML = `
+            <a href="${pageUrl}" target="_blank">${title}</a>
+            <div class="result-snippet">${snippet}...</div>
+          `;
+          resultsDiv.appendChild(div);
+        });
+      } catch (error) {
+        resultsDiv.innerHTML = "<p>Error fetching results.</p>";
+        console.error(error);
+      }
+      
+        <div id="resultsDiv"></div>
+            alert(search);
+        }
+    </script>
+</body>
+
+</html>
